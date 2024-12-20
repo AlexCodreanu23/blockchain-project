@@ -77,6 +77,7 @@ describe("Proposal", function() {
         const [owner, account1, account2] = await hre.ethers.getSigners();
         const Proposal = await ethers.getContractFactory("Proposal");
         const proposalContract = await Proposal.deploy(owner.address, "Test Proposal", account1.address, 10);
+        await proposalContract.waitForDeployment();
     
         const Treasury = await ethers.getContractFactory("Treasury");
         const treasuryContract = await Treasury.deploy(proposalContract.target); // Set Proposal as DAO
@@ -96,7 +97,8 @@ describe("Proposal", function() {
     it("should not execute a rejected proposal", async function() {
         const [owner, account1, account2, treasuryAddress] = await hre.ethers.getSigners();
         const Proposal = await ethers.getContractFactory("Proposal");
-        const proposalContract = await Proposal.deploy(owner.address, "Test Proposal", account1.address, 100);
+        const proposalContract = await Proposal.deploy(owner.address, "Test Proposal", account1.address, 10);
+
         await proposalContract.connect(account1).vote(false);
         await proposalContract.connect(account2).vote(false);
         await proposalContract.connect(owner).finishVote();
