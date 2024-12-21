@@ -5,6 +5,7 @@ async function main() {
     await daoContract.waitForDeployment();
 
     console.log("DAO Contract deployed at:", daoContract.target);
+    console.log(daoContract);
 }
 
 main()
