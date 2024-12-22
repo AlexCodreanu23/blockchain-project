@@ -1,18 +1,24 @@
 import Lock_ABI from "./Lock_ABI.json";
+import DAO_ABI from "./DAO_ABI.json";
 import { BrowserProvider, Contract, parseEther, formatEther } from "ethers";
 import { CONTRACT_ADDRESS } from "./constants";
+import {DAO_ADDRESS} from "./daoAddress"; 
 
 // Module-level variables to store provider, signer, and contract
 let provider;
 let signer;
 let contract;
+let daoContract;
 
+console.log(DAO_ADDRESS);
+console.log(DAO_ABI);
 // Function to initialize the provider, signer, and contract
 const initialize = async () => {
   if (typeof window.ethereum !== "undefined") {
     provider = new BrowserProvider(window.ethereum);
     signer = await provider.getSigner();
     contract = new Contract(CONTRACT_ADDRESS, Lock_ABI, signer);
+    daoContract = new Contract(DAO_ADDRESS, DAO_ABI, signer);
   } else {
     console.error("Please install MetaMask!");
   }
@@ -50,4 +56,14 @@ export const withdrawFund = async () => {
   const withdrawTx = await contract.withdraw();
   await withdrawTx.wait();
   console.log("Withdrawal successful!");
+};
+
+export const createProposal = async (description, recipient, amount) => {
+  try{
+    const tx = await daoContract.createProposal(description, recipient, amount);
+    await tx.wait();
+    console.log("Proposal created succesfully");
+  }catch(error){
+    console.log("An error has occured:", error.message);
+  }
 };

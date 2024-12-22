@@ -20,4 +20,4 @@ function ContractInfo({ account }) {
   );
 }
 
-export default ContractInfo;
+export default ContractInfo;  
