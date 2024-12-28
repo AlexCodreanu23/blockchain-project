@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { depositFund } from "../utils/contractServices";
 import { withdrawFund } from "../utils/contractServices";
-import {createProposal} from "../utils/contractServices";
+import {createProposal, getProposals} from "../utils/contractServices";
 import { toast } from "react-toastify";
 
 function ContractActions() {
@@ -9,6 +9,16 @@ function ContractActions() {
   const [proposalDescription, setProposalDescription] = useState("");
   const [proposalRecipient, setProposalRecipient] = useState("");
   const [proposalAmount, setProposalAmount] = useState("");
+  const [proposals, setProposals] = useState([]);
+
+  useEffect(() => {
+    const fetchProposals = async () => {
+      const proposalsData = await getProposals();
+      setProposals(proposalsData);
+    };
+
+    fetchProposals();
+  }, []);
 
   const handleDeposit = async () => {
     try {
@@ -40,6 +50,9 @@ function ContractActions() {
         setProposalDescription("");
         setProposalRecipient("");
         setProposalAmount("");
+
+        const newProposal = await getProposals();
+        setProposals(newProposal);
       }
     }catch(error){
       toast.error(error?.reason || "An error occurred while creating the proposal.");
@@ -77,6 +90,16 @@ function ContractActions() {
                 onChange={(e) => setProposalAmount(e.target.value)}
                 placeholder="Amount in ETH"/>
         <button onClick = {handleCreateProposal}>Create a proposal</button>
+      </div>
+      <div>
+        <h1>Proposals</h1>
+        <ul>
+          {proposals.map((proposal, index) => (
+            <li key={index}>
+              Proposal Address: {proposal.address}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

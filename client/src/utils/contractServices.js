@@ -19,6 +19,7 @@ const initialize = async () => {
     signer = await provider.getSigner();
     contract = new Contract(CONTRACT_ADDRESS, Lock_ABI, signer);
     daoContract = new Contract(DAO_ADDRESS, DAO_ABI, signer);
+    console.log(daoContract);
   } else {
     console.error("Please install MetaMask!");
   }
@@ -26,6 +27,8 @@ const initialize = async () => {
 
 // Initialize once when the module is loaded
 initialize();
+console.log(contract);
+console.log(daoContract);
 
 // Function to request single account
 export const requestAccount = async () => {
@@ -65,5 +68,17 @@ export const createProposal = async (description, recipient, amount) => {
     console.log("Proposal created succesfully");
   }catch(error){
     console.log("An error has occured:", error.message);
+  }
+};
+
+export const getProposals = async () => {
+  try {
+    const proposalAddresses = await daoContract.getProposals();
+    return proposalAddresses.map((address) => ({
+      address: address.toString(),
+    }));
+  } catch (error) {
+    console.error("Error fetching proposals:", error.message);
+    return [];
   }
 };
