@@ -1,8 +1,7 @@
-import React, { useState, useEffect  } from "react";
+import React, { useEffect, useState } from "react";
 import { depositFund } from "../utils/contractServices";
 import { withdrawFund } from "../utils/contractServices";
-import {createProposal} from "../utils/contractServices";
-import { getProposals } from "../utils/contractServices";
+import {createProposal, getProposals} from "../utils/contractServices";
 import { toast } from "react-toastify";
 
 function ContractActions() {
