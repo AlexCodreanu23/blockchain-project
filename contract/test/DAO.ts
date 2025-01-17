@@ -36,7 +36,6 @@ describe("DAO Contract", function () {
         const DAO = await ethers.getContractFactory("DAO");
         const daoContract = await DAO.deploy(owner.address);
 
-
         await daoContract.connect(owner).addMember(account1.address);
         await daoContract.connect(account1).createProposal("Proposal 1", account2.address, 5);
         await daoContract.connect(account1).createProposal("Proposal 2", account2.address, 10);

@@ -4,15 +4,14 @@ import { BrowserProvider, Contract, parseEther, formatEther } from "ethers";
 import { CONTRACT_ADDRESS } from "./constants";
 import {DAO_ADDRESS} from "./daoAddress"; 
 
-// Module-level variables to store provider, signer, and contract
+
 let provider;
 let signer;
 let contract;
 let daoContract;
 
-console.log(DAO_ADDRESS);
-console.log(DAO_ABI);
-// Function to initialize the provider, signer, and contract
+
+
 const initialize = async () => {
   if (typeof window.ethereum !== "undefined") {
     provider = new BrowserProvider(window.ethereum);
@@ -25,36 +24,35 @@ const initialize = async () => {
   }
 };
 
+
 // Initialize once when the module is loaded
 initialize();
 console.log(contract);
 console.log(daoContract);
 
-// Function to request single account
 export const requestAccount = async () => {
   try {
     const accounts = await provider.send("eth_requestAccounts", []);
-    return accounts[0]; // Return the first account
+    return accounts[0]; 
   } catch (error) {
     console.error("Error requesting account:", error.message);
     return null;
   }
 };
-// Function to get contract balance in ETH
+
 export const getContractBalanceInETH = async () => {
   const balanceWei = await provider.getBalance(CONTRACT_ADDRESS);
-  const balanceEth = formatEther(balanceWei); // Convert Wei to ETH string
-  return balanceEth; // Convert ETH string to number
+  const balanceEth = formatEther(balanceWei); 
+  return balanceEth; 
 };
 
-// Function to deposit funds to the contract
 export const depositFund = async (depositValue) => {
   const ethValue = parseEther(depositValue);
   const deposit = await contract.deposit({ value: ethValue });
   await deposit.wait();
 };
 
-// Function to withdraw funds from the contract
+
 export const withdrawFund = async () => {
   const withdrawTx = await contract.withdraw();
   await withdrawTx.wait();
