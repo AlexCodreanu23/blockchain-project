@@ -92,7 +92,7 @@ function ContractActions() {
         <button onClick = {handleCreateProposal}>Create a proposal</button>
       </div>
       <div>
-        <h1>Proposals</h2>
+        <h1>Proposals</h1>
         <ul>
           {proposals.map((proposal, index) => (
             <li key={index}>
