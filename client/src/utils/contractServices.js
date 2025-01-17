@@ -25,6 +25,7 @@ const initialize = async () => {
 };
 
 
+// Initialize once when the module is loaded
 await initialize();
 console.log(contract);
 console.log(daoContract);
