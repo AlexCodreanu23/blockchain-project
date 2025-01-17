@@ -19,15 +19,16 @@ describe("DAO Contract", function () {
     
         await daoContract.connect(owner).addMember(account1.address);
         await daoContract.connect(account1).createProposal("Test proposal", account2.address, 5);
+        await daoContract.connect(account1).createProposal("TEST2", account2.address, 10);
     
         const proposals = await daoContract.getProposals();
-        
+        console.log(proposals);
         // Connect to the first Proposal contract
         const Proposal = await ethers.getContractFactory("Proposal");
         const proposalContract = Proposal.attach(proposals[0]); // Attach to the deployed Proposal contract
         
     
-        expect(proposals.length).to.equal(1);
+        expect(proposals.length).to.equal(2);
     });
 
     it("should return all proposals", async function () {

@@ -4,6 +4,7 @@ async function main() {
     const proposalContract = await Proposal.deploy(owner.address, "Test Proposal", account1.address, 100);
     await proposalContract.waitForDeployment();
 
+    console.log(proposalContract);
     console.log("Proposal Contract deployed at:", proposalContract.target);
 }
 

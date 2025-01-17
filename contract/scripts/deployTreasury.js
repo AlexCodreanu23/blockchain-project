@@ -4,6 +4,7 @@ async function main() {
     const treasuryContract = await Treasury.deploy(owner.address);
     await treasuryContract.waitForDeployment();
 
+    console.log(treasuryContract);
     console.log("Treasury Contract deployed at:", treasuryContract.target);
 }
 

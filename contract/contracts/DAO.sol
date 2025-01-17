@@ -49,7 +49,12 @@ contract DAO{
         proposal.executeProposal(address(treasury));
     }
 
-    function getProposals() external view returns(Proposal[] memory){
-        return proposals;
+    function getProposals() external view returns(address[] memory) {
+        address[] memory addresses = new address[](proposals.length);
+        for (uint i = 0; i < proposals.length; i++) {
+            addresses[i] = address(proposals[i]);
+        }
+        return addresses;
     }
+
 }
