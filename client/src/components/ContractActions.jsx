@@ -20,7 +20,6 @@ function ContractActions() {
     fetchProposals();
   }, []);
 
-
   const handleDeposit = async () => {
     try {
       await depositFund(depositValue);
@@ -52,8 +51,8 @@ function ContractActions() {
         setProposalRecipient("");
         setProposalAmount("");
 
-        const updatedProposals = await getProposals();
-        setProposals(updatedProposals);
+        const newProposal = await getProposals();
+        setProposals(newProposal);
       }
     }catch(error){
       toast.error(error?.reason || "An error occurred while creating the proposal.");
@@ -93,7 +92,7 @@ function ContractActions() {
         <button onClick = {handleCreateProposal}>Create a proposal</button>
       </div>
       <div>
-        <h2>Proposals</h2>
+        <h1>Proposals</h2>
         <ul>
           {proposals.map((proposal, index) => (
             <li key={index}>
