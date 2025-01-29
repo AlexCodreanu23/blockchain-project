@@ -1,15 +1,14 @@
+
+
 async function main() {
     const [owner, account1, account2] = await ethers.getSigners();
     const Proposal = await ethers.getContractFactory("Proposal");
-    const proposalContract = await Proposal.deploy(owner.address, "Test Proposal", account1.address, 100);
-    await proposalContract.waitForDeployment();
+    const proposalContract = await Proposal.deploy(owner.address, "Test Proposal", account1.address, 100); // Deploys the contract`
 
-    console.log("Proposal Contract deployed at:", proposalContract.target);
+    console.log("Proposal deployed to:", proposalContract.address);
 }
 
-main()
-    .then(() => process.exit(0))
-    .catch((error) => {
-        console.error(error);
-        process.exit(1);
-    });
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});

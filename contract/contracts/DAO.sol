@@ -27,6 +27,10 @@ contract DAO{
         treasury = Treasury(treasuryAddress);
     }
 
+    function isValidAmount(uint amount)public pure returns (bool){
+        return amount > 0;
+    }
+
     function addMember(address member)external onlyOwner{
         require(!members[member], "Member already exists");
         members[member] = true;
@@ -49,7 +53,12 @@ contract DAO{
         proposal.executeProposal(address(treasury));
     }
 
-    function getProposals() external view returns(Proposal[] memory){
-        return proposals;
+    function getProposals() external view returns (address[] memory) {
+        address[] memory proposalAddresses = new address[](proposals.length);
+
+        for (uint i = 0; i < proposals.length; i++) {
+            proposalAddresses[i] = address(proposals[i]);
+        }
+        return proposalAddresses;
     }
 }

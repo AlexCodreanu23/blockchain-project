@@ -95,4 +95,15 @@ describe("DAO Contract", function () {
         const status = proposalData.status;
         expect(status).to.equal(3);
     });
+
+    it("its a valid sum", async function() {
+        const [owner, account1, account2] = await hre.ethers.getSigners();
+        const DAO = await ethers.getContractFactory("DAO");
+        const Treasury = await ethers.getContractFactory("Treasury");
+        const treasuryContract = await Treasury.deploy(owner.address);
+        const daoContract = await DAO.connect(owner).deploy(treasuryContract.target);
+
+        const stat = await daoContract.connect(owner).isValidAmount(15);
+        expect(stat).to.equal(true);
+    });
 });

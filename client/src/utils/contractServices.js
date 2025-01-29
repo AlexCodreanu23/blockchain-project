@@ -10,8 +10,8 @@ let signer;
 let contract;
 let daoContract;
 
-console.log(DAO_ADDRESS);
-console.log(DAO_ABI);
+console.log("AAAAAAAAAAAAAAAA", DAO_ADDRESS);
+console.log("BBBBBBBBBBBBBBBBB", DAO_ABI);
 // Function to initialize the provider, signer, and contract
 const initialize = async () => {
   if (typeof window.ethereum !== "undefined") {
@@ -23,12 +23,18 @@ const initialize = async () => {
   } else {
     console.error("Please install MetaMask!");
   }
+  if(typeof daoContract == "undefined"){
+    console.log("fnjsfdklaslas");
+  }
 };
 
 // Initialize once when the module is loaded
-initialize();
-console.log(contract);
-console.log(daoContract);
+await initialize();
+if(typeof daoContract == "undefined"){
+  console.log("bsakdfasd");
+}
+console.log("DDDDDDDDDDDDDDDDDDD",contract);
+console.log("EEEEEEEEEEEEEEEEEEEEE", daoContract);
 
 // Function to request single account
 export const requestAccount = async () => {
@@ -63,6 +69,9 @@ export const withdrawFund = async () => {
 
 export const createProposal = async (description, recipient, amount) => {
   try{
+    if(typeof daoContract == "undefined"){
+      console.log("ZZZZZZZZZZZZZ");
+    }
     const tx = await daoContract.createProposal(description, recipient, amount);
     await tx.wait();
     console.log("Proposal created succesfully");
@@ -74,11 +83,29 @@ export const createProposal = async (description, recipient, amount) => {
 export const getProposals = async () => {
   try {
     const proposalAddresses = await daoContract.getProposals();
-    return proposalAddresses.map((address) => ({
-      address: address.toString(),
-    }));
+    return proposalAddresses.map((address) => ( { address } ));
   } catch (error) {
     console.error("Error fetching proposals:", error.message);
     return [];
   }
 };
+
+export const finishVote = async (proposalIndex) => {
+  try{
+    const tx = await daoContract.finishVote(proposalIndex);
+    await tx.wait();
+    console.log("finishVote a fost apelat");
+  }catch(error){
+    console.log("A aparut o eroare: ", error);
+  }
+}
+
+export const executeProposal = async (proposalIndex) => {
+  try{
+    const tx = await daoContract.executeProposal(proposalIndex);
+    await tx.wait();
+    console.log("Executia a functionat");
+  }catch(error){
+    console.log("A aparut o eroare: ", error);
+  }
+}
