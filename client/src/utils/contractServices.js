@@ -3,6 +3,7 @@ import DAO_ABI from "./DAO_ABI.json";
 import { BrowserProvider, Contract, parseEther, formatEther } from "ethers";
 import { CONTRACT_ADDRESS } from "./constants";
 import {DAO_ADDRESS} from "./daoAddress"; 
+import { ethers } from "ethers";
 
 // Module-level variables to store provider, signer, and contract
 let provider;
@@ -72,9 +73,42 @@ export const createProposal = async (description, recipient, amount) => {
     if(typeof daoContract == "undefined"){
       console.log("ZZZZZZZZZZZZZ");
     }
-    const tx = await daoContract.createProposal(description, recipient, amount);
+    
+    const estimatedGas = await daoContract.createProposal.estimateGas(
+      description,
+      recipient,
+      amount
+    );
+    console.log(`Estimated Gas: ${estimatedGas.toString()}`);
+
+    // Calculam costul gasului
+    const feeData = await provider.getFeeData();
+    const gasPrice = feeData.gasPrice; 
+    if (!gasPrice) {
+      console.error("Could not retrieve a gas price from the provider.");
+      return;
+    }
+    console.log(`Gas Price: ${ethers.formatEther(gasPrice)} ETH`);
+
+    // Calculam costul total
+    const totalCost = estimatedGas * gasPrice; 
+    const totalCostEth = ethers.formatEther(totalCost);
+    console.log(`Total Estimated Cost: ${totalCostEth} ETH`);
+
+    const maxAllowedCost = ethers.parseEther("0.05"); 
+    if(totalCost > maxAllowedCost){
+      console.error(
+        `Costul estimat (${totalCostEth} ETH) depaseste limita setata (${ethers.formatEther(maxAllowedCost)} ETH).`
+      );
+      return;
+    }
+
+    // Efectuam tranzactia
+    const tx = await daoContract.createProposal(description, recipient, amount, {
+      gasLimit: estimatedGas
+    });
     await tx.wait();
-    console.log("Proposal created succesfully");
+    console.log("Proposal created successfully:", tx);
   }catch(error){
     console.log("An error has occured:", error.message);
   }

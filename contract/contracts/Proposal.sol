@@ -82,7 +82,7 @@ contract Proposal{
     function executeProposal(address treasuryAddress) external onlyApproved onlyDAO{
         require(proposal.amount > 0, "Invalid proposal amount");
         Treasury treasury = Treasury(treasuryAddress);
-        treasury.releaseFunds(proposal.recipient, proposal.amount);
+        treasury.allocateFunds(proposal.recipient, proposal.amount);
 
         proposal.status = ProposalStatus.Executed;
         proposal.executionTime = block.timestamp;
