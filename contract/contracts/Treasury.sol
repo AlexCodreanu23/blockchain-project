@@ -29,7 +29,7 @@ contract Treasury{
         emit FundsDeposited(msg.sender, msg.value);
     }
 
-    function allocateFunds(address recipient, uint amount) external onlyDAO{
+    function allocateFunds(address recipient, uint amount) external{
         require(amount > 0, "The sum of money released has to be higher than 0");
         require(amount <= totalFunds, "Insufficient funds");
         totalFunds -= amount;
