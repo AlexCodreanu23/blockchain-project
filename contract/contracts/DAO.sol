@@ -37,7 +37,7 @@ contract DAO{
         emit MemberAdded(member);
     }
 
-    function createProposal(string memory description, address recipient, uint amount) external onlyMember{
+    function createProposal(string memory description, address recipient, uint amount) external{
         Proposal proposal = new Proposal(address(this), description, recipient, amount);
         proposals.push(proposal);
         emit ProposalCreated(address(proposal), description);
@@ -53,7 +53,7 @@ contract DAO{
         proposal.executeProposal(address(treasury));
     }
 
-    function getProposals() external view returns (address[] memory) {
+    function getProposals() public view returns (address[] memory) {
         address[] memory proposalAddresses = new address[](proposals.length);
 
         for (uint i = 0; i < proposals.length; i++) {
